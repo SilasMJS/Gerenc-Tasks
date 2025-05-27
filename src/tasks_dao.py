@@ -14,10 +14,9 @@ class TasksDAO():
       sql = '''INSERT INTO Tarefa(titulo, descricao, usuario_id)
             VALUES ( ?, ?, ?)'''
       
-      cursor.execute(sql, ( 
-                            Task.titulo, 
-                            Task.descricao, 
-                            Task.usuario_id))
+      cursor.execute(sql, (Task.titulo, 
+                          Task.descricao, 
+                          Task.usuario_id))
       
       id = cursor.lastrowid
       concluida = 0
