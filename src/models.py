@@ -4,7 +4,7 @@ class Usuario(BaseModel):
     id: int
     username: str
     email: str
-    password: str
+    password_hash: str
 
 class Task(BaseModel):
     id: int
