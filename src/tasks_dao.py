@@ -21,3 +21,21 @@ class TasksDAO():
       id = cursor.lastrowid
       concluida = 0
       return Task(id=id, concluida = concluida, **Task.dict())
+  
+  def atualizar_task(self, id: int, Task: Task):
+    with sqlite3.connect('Tarefa.bd') as c:
+      cursor = c.cursor()
+
+      sql = '''UPDATE Veiculos SET titulo = ?,
+      descricao = ?,
+      concluida = ?
+      WHERE id = ?'''
+
+      cursor.execute(sql, (Task.titulo, Task.descricao, Task.concluida, id))
+      c.commit()
+      if cursor.rowcount > 0:
+        return self.obter_por_id(id)
+      return None
+    
+  def obter_por_id(self, id: int):
+    pass
