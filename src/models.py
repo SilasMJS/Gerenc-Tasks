@@ -1,20 +1,27 @@
 from pydantic import BaseModel
+from typing import Optional
 
-class Usuario(BaseModel):
+class UsuarioBase(BaseModel):
     id: int
     username: str
     email: str
     password_hash: str
 
-class Task(BaseModel):
-    id: int
-    titulo: str
-    descricao: str
-    concluida: False
-    usuario_id : int
+class Usuario(UsuarioBase):
+    id: int | None = None
 
-class createUsuario(Usuario):
+class TarefaBase(BaseModel):
+    titulo: str
+    descricao: Optional[str] = None
+
+    
+class Tarefa(TarefaBase):
+    id: int | None = None
+    concluida: int | bool = 0
+    usuario_id : int = 1
+
+class createUsuario(UsuarioBase):
     pass
 
-class createTask(Task):
+class createTarefa(TarefaBase):
     pass

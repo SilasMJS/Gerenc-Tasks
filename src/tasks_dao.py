@@ -1,32 +1,75 @@
 import sqlite3
 
-from models import Usuario, Task, createTask
+from models import Tarefa, createTarefa
 
 class TasksDAO():
   
   def __init__(self):
     pass
+  
+  def todas_tarefas(self):
+    with sqlite3.connect('GerencTasks.db') as c:
+      cursor = c.cursor()
+      
+      sql = '''SELECT * from tarefas'''
+      
+      cursor.execute(sql)
+      tarefas_list = cursor.fetchall()
+      
+      tarefas: list[Tarefa] = []
+      
+      for t in tarefas_list:
+        tarefa = Tarefa(id = t[0],
+        titulo = t[1],
+        descricao = t[2],
+        concluida = t[3],
+        usuario_id = t[4])
+      
+        tarefas.append(tarefa)
+      return tarefas
 
-  def criar_task(self, Task: createTask):
-    with sqlite3.connect('Tarefa.bd') as c:
+  def obter_por_id(self, id: int):
+    with sqlite3.connect('GerencTasks.db') as c:
+      cursor = c.cursor()
+      
+      sql = 'select * from tarefas where id = ?'
+      cursor.execute(sql, (id,))
+      result = cursor.fetchone()
+      
+      if not result:
+        return None
+      
+      tarefa = Tarefa(
+        id = result[0],
+        titulo = result[1],
+        descricao = result[2],
+        concluida = result[3],
+        usuario_id = result[4]
+      )
+      
+      return tarefa
+  
+  def criartarefa(self,tarefa:createTarefa):
+    with sqlite3.connect('GerencTasks.db') as c:
       cursor = c.cursor()
 
-      sql = '''INSERT INTO Tarefa(titulo, descricao, usuario_id)
-            VALUES ( ?, ?, ?)'''
+      sql = '''INSERT INTO tarefas(titulo, descricao)
+            VALUES ( ?, ?)'''
       
-      cursor.execute(sql, (Task.titulo, 
-                          Task.descricao, 
-                          Task.usuario_id))
+      cursor.execute(sql, (tarefa.titulo, 
+                          tarefa.descricao))
       
       id = cursor.lastrowid
       concluida = 0
-      return Task(id=id, concluida = concluida, **Task.dict())
+      usuario_id = 1
+      return Tarefa(id=id, concluida = concluida, usuario_id = usuario_id, **tarefa.dict())
   
-  def atualizar_task(self, id: int, Task: Task):
-    with sqlite3.connect('Tarefa.bd') as c:
+  
+  def atualizar_task(self, id: int, Task:createTarefa):
+    with sqlite3.connect('GerencTasks.db') as c:
       cursor = c.cursor()
 
-      sql = '''UPDATE Veiculos SET titulo = ?,
+      sql = '''UPDATE tarefas SET titulo = ?,
       descricao = ?,
       concluida = ?
       WHERE id = ?'''
@@ -37,5 +80,3 @@ class TasksDAO():
         return self.obter_por_id(id)
       return None
     
-  def obter_por_id(self, id: int):
-    pass
