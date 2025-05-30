@@ -20,6 +20,10 @@ class Tarefa(TarefaBase):
     concluida: int | bool = 0
     usuario_id : int = 1
 
+class atualizarTarefa(BaseModel):
+    titulo: str
+    concluida: int = 0
+
 class createUsuario(UsuarioBase):
     pass
 
