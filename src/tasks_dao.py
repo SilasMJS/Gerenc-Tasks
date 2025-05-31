@@ -1,19 +1,19 @@
 import sqlite3
 
-from models import Tarefa, createTarefa
+from models import *
 
 class TasksDAO():
   
   def __init__(self):
     pass
   
-  def todas_tarefas(self):
+  def todas_tarefas_por_usuario(self, usuario: Usuario):
     with sqlite3.connect('GerencTasks.db') as c:
       cursor = c.cursor()
       
-      sql = '''SELECT * from tarefas'''
+      sql = '''SELECT * from tarefas where usuario_id = ?'''
       
-      cursor.execute(sql)
+      cursor.execute(sql, (usuario.id,))
       tarefas_list = cursor.fetchall()
       
       tarefas: list[Tarefa] = []
@@ -73,20 +73,20 @@ class TasksDAO():
       
       return tarefa
   
-  def criartarefa(self,tarefa:createTarefa):
+  def criartarefa(self,tarefa:createTarefa, usuario:Usuario):
     with sqlite3.connect('GerencTasks.db') as c:
       cursor = c.cursor()
 
-      sql = '''INSERT INTO tarefas(titulo, descricao)
-            VALUES ( ?, ?)'''
+      sql = '''INSERT INTO tarefas(titulo, descricao, usuario_id)
+            VALUES ( ?, ?, ?)'''
       
       cursor.execute(sql, (tarefa.titulo, 
-                          tarefa.descricao))
+                          tarefa.descricao,
+                          usuario.id))
       
       id = cursor.lastrowid
       concluida = 0
-      usuario_id = 1
-      return Tarefa(id=id, concluida = concluida, usuario_id = usuario_id, **tarefa.dict())
+      return Tarefa(id=id, concluida = concluida, **tarefa.dict())
   
   
   def atualizartarefa(self, id: int, Task:Tarefa):

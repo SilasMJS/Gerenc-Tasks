@@ -2,13 +2,20 @@ from pydantic import BaseModel
 from typing import Optional
 
 class UsuarioBase(BaseModel):
-    id: int
     username: str
     email: str
     password_hash: str
 
 class Usuario(UsuarioBase):
     id: int | None = None
+
+class SignupUser(UsuarioBase):
+    pass
+
+class SignInUser(BaseModel):
+    username: str
+    email: str
+    password_hash: str
 
 class TarefaBase(BaseModel):
     titulo: str

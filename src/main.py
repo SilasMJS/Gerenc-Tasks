@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from tasks_routes import roteador_tasks
+from auth_routes import router
 
 app = FastAPI()
 
@@ -18,4 +19,4 @@ app.add_middleware(
 app.include_router(roteador_tasks)
 
 # Rotas de Autenticaco
-# app.include_router(roteador_auth)
+app.include_router(router)
