@@ -6,7 +6,7 @@ FROM python:3.11-slim-buster
 WORKDIR /home/app
 
 # Copie os arquivos de requirements para o contêiner
-COPY requirements.txt .
+COPY src/requirements.txt .
 
 # Copie o código da sua aplicação para o contêiner
 COPY . .
